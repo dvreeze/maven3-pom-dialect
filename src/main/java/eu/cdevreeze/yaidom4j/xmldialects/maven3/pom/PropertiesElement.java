@@ -17,9 +17,11 @@
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * Properties element in a Maven POM file.
@@ -30,5 +32,19 @@ public record PropertiesElement(Element backingElement) implements AnyPomElement
 
     public PropertiesElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "properties")));
+    }
+
+    public ImmutableMap<String, String> rawProperties() {
+        return childElementStream()
+                .map(e -> Map.entry(e.backingElement().name().getLocalPart(), e.rawStrippedText()))
+                .collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public PomProperties ownProperties(PomProperties inheritedPomProperties) {
+        ImmutableMap<String, String> resultProperties = rawProperties().entrySet()
+                .stream()
+                .map(kv -> Map.entry(kv.getKey(), inheritedPomProperties.expandInString(kv.getValue())))
+                .collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
+        return new PomProperties(resultProperties);
     }
 }

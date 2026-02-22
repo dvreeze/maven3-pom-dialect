@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Properties in a POM file. This class offers methods to resolve properties in any string value in a POM.
@@ -30,18 +31,35 @@ import java.util.Objects;
  */
 public record PomProperties(ImmutableMap<String, String> properties) {
 
+    private static final int MAX_RECURSION_DEPTH = 100;
+
     public PomProperties {
-        Preconditions.checkArgument(properties.keySet().stream().allMatch(this::isAllowedProperty));
+        Preconditions.checkArgument(properties.keySet().stream().allMatch(this::isAllowedPropertyName));
+        Preconditions.checkArgument(properties.values().stream().allMatch(this::isAllowedPropertyValue));
     }
 
-    private static final int MAX_RECURSION_DEPTH = 100;
+    public static PomProperties empty() {
+        return new PomProperties(ImmutableMap.of());
+    }
 
     public String expandInString(String value) {
         return expandInString(value, 0);
     }
 
-    private boolean isAllowedProperty(String property) {
+    public PomProperties add(PomProperties addedPomProperties) {
+        ImmutableMap<String, String> resultProps = ImmutableMap.<String, String>builder()
+                .putAll(this.properties())
+                .putAll(addedPomProperties.properties())
+                .buildKeepingLast();
+        return new PomProperties(resultProps);
+    }
+
+    private boolean isAllowedPropertyName(String property) {
         return property.codePoints().allMatch(c -> Character.isLetterOrDigit(c) || Character.toString(c).equals("."));
+    }
+
+    private boolean isAllowedPropertyValue(String value) {
+        return !value.contains("${");
     }
 
     private String expandInString(String value, int recursionDepth) {
@@ -60,7 +78,7 @@ public record PomProperties(ImmutableMap<String, String> properties) {
 
             String propertyName = value.substring(idx + 2, nextIdx);
             Preconditions.checkState(!propertyName.isEmpty(), "Empty property name found");
-            String propertyValue = Objects.requireNonNull(resolveProperty(propertyName));
+            String propertyValue = Objects.requireNonNull(tryToResolveProperty(propertyName).orElseThrow());
 
             sb.append(propertyValue).append(value.substring(nextIdx + 1));
 
@@ -69,9 +87,9 @@ public record PomProperties(ImmutableMap<String, String> properties) {
         }
     }
 
-    private String resolveProperty(String propertyName) {
+    private Optional<String> tryToResolveProperty(String propertyName) {
         // TODO Resolve environment variables, system properties, etc.
         // See https://www.sonatype.com/maven-complete-reference/properties-and-resource-filtering
-        return Objects.requireNonNull(properties.get(propertyName));
+        return Optional.ofNullable(properties.get(propertyName));
     }
 }

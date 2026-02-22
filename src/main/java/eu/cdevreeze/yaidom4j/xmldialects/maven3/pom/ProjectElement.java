@@ -38,14 +38,32 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return new ProjectElement(backingElement);
     }
 
-    public Dependency artifactAsDependency(ParentContext parentContext, PomProperties properties) {
+    public PomProperties ownProperties(PomProperties inheritedProperties) {
+        // TODO Properties referring to XML element paths in this POM
+        return propertiesElementOption()
+                .map(e -> e.ownProperties(inheritedProperties))
+                .orElse(PomProperties.empty());
+    }
+
+    public PomProperties resultProperties(PomProperties inheritedProperties) {
+        return inheritedProperties.add(ownProperties(inheritedProperties));
+    }
+
+    /**
+     * Returns the "target artifact" as {@link Dependency}. Fails for the super POM.
+     */
+    public Dependency artifactAsDependency(ProjectElement parentEffectivePom, PomProperties extraProperties) {
+        PomProperties inheritedPomProperties = parentEffectivePom.ownProperties(PomProperties.empty());
+        PomProperties pomProperties = resultProperties(inheritedPomProperties)
+                .add(extraProperties);
+
         return new Dependency(
-                groupIdOption(properties)
-                        .or(() -> parentContext.groupIdOption(properties))
+                groupIdOption(pomProperties)
+                        .or(() -> parentEffectivePom.groupIdOption(inheritedPomProperties))
                         .orElseThrow(),
-                artifactIdOption(properties).orElseThrow(),
-                versionOption(properties)
-                        .or(() -> parentContext.versionOption(properties))
+                artifactIdOption(pomProperties).orElseThrow(),
+                versionOption(pomProperties)
+                        .or(() -> parentEffectivePom.versionOption(inheritedPomProperties))
                         .orElseThrow()
         );
     }
@@ -90,6 +108,10 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return urlElementOption().map(e -> e.resolvedValue(properties));
     }
 
+    public Optional<PropertiesElement> propertiesElementOption() {
+        return childElementStream(PropertiesElement.class).findFirst();
+    }
+
     public Optional<ModulesElement> modulesElementOption() {
         return childElementStream(ModulesElement.class).findFirst();
     }
@@ -109,16 +131,24 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
     }
 
     // TODO Take dependencyManagement into account, from same POM file and its ancestry
-    public ImmutableList<Dependency> dependencies(ParentContext parentContext, PomProperties properties) {
+    public ImmutableList<Dependency> dependencies(ProjectElement parentEffectivePom, PomProperties extraProperties) {
+        PomProperties inheritedPomProperties = parentEffectivePom.ownProperties(PomProperties.empty());
+        PomProperties pomProperties = resultProperties(inheritedPomProperties)
+                .add(extraProperties);
+
         return dependenciesElementOption()
                 .map(elm -> elm.dependencyElements()
                         .stream()
                         .map(e -> new Dependency(
-                                e.groupIdOption(properties).orElseThrow(),
-                                e.artifactIdOption(properties).orElseThrow(),
-                                e.versionOption(properties).orElseThrow()
+                                e.groupIdOption(pomProperties).orElseThrow(),
+                                e.artifactIdOption(pomProperties).orElseThrow(),
+                                e.versionOption(pomProperties).orElseThrow()
                         ))
                         .collect(ImmutableList.toImmutableList()))
                 .orElse(ImmutableList.of());
     }
+
+    // TODO Plugins, plugin management etc.
+
+    // TODO Profiles, and data retrieval specific to profile
 }
