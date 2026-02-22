@@ -25,7 +25,10 @@ import com.google.common.collect.ImmutableList;
  */
 public record EffectivePom(ProjectElement projectElement) {
 
+    private static final String APACHE_MAVEN_BASE_GROUP_ID = "org.apache.maven";
+
     // TODO Check that the POM is indeed an effective POM, so a "closed world"
+    // Typically that means that the POM contains no explicit parent
 
     public static EffectivePom from(ProjectElement projectElement) {
         return new EffectivePom(projectElement);
@@ -39,12 +42,15 @@ public record EffectivePom(ProjectElement projectElement) {
                 .add(extraProperties);
 
         return new Dependency(
-                projectElement().groupIdOption(pomProperties).orElseThrow(),
+                projectElement().groupIdOption(pomProperties).orElse(APACHE_MAVEN_BASE_GROUP_ID),
                 projectElement().artifactIdOption(pomProperties).orElseThrow(),
                 projectElement().versionOption(pomProperties).orElseThrow()
         );
     }
 
+    /**
+     * Returns the dependencies in the "dependencies" section, not the "dependencyManagement" section.
+     */
     public ImmutableList<Dependency> dependencies(PomProperties extraProperties) {
         PomProperties pomProperties = projectElement().resultProperties(PomProperties.empty())
                 .add(extraProperties);
@@ -53,7 +59,7 @@ public record EffectivePom(ProjectElement projectElement) {
                 .map(elm -> elm.dependencyElements()
                         .stream()
                         .map(e -> new Dependency(
-                                e.groupIdOption(pomProperties).orElseThrow(),
+                                e.groupIdOption(pomProperties).orElse(APACHE_MAVEN_BASE_GROUP_ID),
                                 e.artifactIdOption(pomProperties).orElseThrow(),
                                 e.versionOption(pomProperties).orElseThrow()
                         ))
