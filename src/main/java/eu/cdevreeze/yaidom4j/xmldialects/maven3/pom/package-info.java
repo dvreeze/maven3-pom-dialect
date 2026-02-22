@@ -25,6 +25,8 @@
  * <p>
  * See <a href="https://maven.apache.org/ref/3.0.3/maven-model/apidocs/index.html">Maven Model API doc</a>
  * for the API documentation of Maven itself as Java library.
+ * <p>
+ * This library has no logic to compute an effective POM.
  *
  * @author Chris de Vreeze
  */

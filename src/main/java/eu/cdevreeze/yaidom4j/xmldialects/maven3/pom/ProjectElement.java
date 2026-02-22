@@ -49,25 +49,6 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return inheritedProperties.add(ownProperties(inheritedProperties));
     }
 
-    /**
-     * Returns the "target artifact" as {@link Dependency}. Fails for the super POM.
-     */
-    public Dependency artifactAsDependency(ProjectElement parentEffectivePom, PomProperties extraProperties) {
-        PomProperties inheritedPomProperties = parentEffectivePom.ownProperties(PomProperties.empty());
-        PomProperties pomProperties = resultProperties(inheritedPomProperties)
-                .add(extraProperties);
-
-        return new Dependency(
-                groupIdOption(pomProperties)
-                        .or(() -> parentEffectivePom.groupIdOption(inheritedPomProperties))
-                        .orElseThrow(),
-                artifactIdOption(pomProperties).orElseThrow(),
-                versionOption(pomProperties)
-                        .or(() -> parentEffectivePom.versionOption(inheritedPomProperties))
-                        .orElseThrow()
-        );
-    }
-
     public Optional<ModelVersionElement> modelVersionElementOption() {
         return childElementStream(ModelVersionElement.class).findFirst();
     }
@@ -128,24 +109,6 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
 
     public Optional<DependenciesElement> dependenciesElementOption() {
         return childElementStream(DependenciesElement.class).findFirst();
-    }
-
-    // TODO Take dependencyManagement into account, from same POM file and its ancestry
-    public ImmutableList<Dependency> dependencies(ProjectElement parentEffectivePom, PomProperties extraProperties) {
-        PomProperties inheritedPomProperties = parentEffectivePom.ownProperties(PomProperties.empty());
-        PomProperties pomProperties = resultProperties(inheritedPomProperties)
-                .add(extraProperties);
-
-        return dependenciesElementOption()
-                .map(elm -> elm.dependencyElements()
-                        .stream()
-                        .map(e -> new Dependency(
-                                e.groupIdOption(pomProperties).orElseThrow(),
-                                e.artifactIdOption(pomProperties).orElseThrow(),
-                                e.versionOption(pomProperties).orElseThrow()
-                        ))
-                        .collect(ImmutableList.toImmutableList()))
-                .orElse(ImmutableList.of());
     }
 
     // TODO Plugins, plugin management etc.

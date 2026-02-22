@@ -52,17 +52,17 @@ class Maven3DialectTests {
 
     @Test
     void testQueryDependencies() {
-        ProjectElement superPom = SuperPomFactory.createSuperPom();
-
         PomProperties extraProperties = new PomProperties(ImmutableMap.of("revision", "0.0.1-SNAPSHOT"));
 
         ProjectElement projectElement = ProjectElement.from(doc.documentElement());
+        // TODO Use super POM
+        EffectivePom effectivePom = EffectivePom.from(projectElement);
 
         Dependency expectedDependency =
                 new Dependency("kms-api-examples", "kms-api-examples", "0.0.1-SNAPSHOT");
-        assertEquals(expectedDependency, projectElement.artifactAsDependency(superPom, extraProperties));
+        assertEquals(expectedDependency, effectivePom.artifactAsDependency(extraProperties));
 
-        List<Dependency> dependencies = projectElement.dependencies(superPom, extraProperties);
+        List<Dependency> dependencies = effectivePom.dependencies(extraProperties);
 
         List<Dependency> expectedDependencies = List.of(
                 new Dependency("org.apache.httpcomponents", "httpclient", "4.3.2"),
