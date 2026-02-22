@@ -22,6 +22,9 @@
  * See <a href="https://maven.apache.org/xsd/maven-4.0.0.xsd">maven-4.0.0.xsd</a> for the POM XSD file.
  * <p>
  * Also see <a href="https://www.sonatype.com/maven-complete-reference">Maven Complete Reference</a>.
+ * <p>
+ * See <a href="https://maven.apache.org/ref/3.0.3/maven-model/apidocs/index.html">Maven Model API doc</a>
+ * for the API documentation of Maven itself as Java library.
  *
  * @author Chris de Vreeze
  */

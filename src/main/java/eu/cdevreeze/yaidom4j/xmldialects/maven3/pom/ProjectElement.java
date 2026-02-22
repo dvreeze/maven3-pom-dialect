@@ -107,4 +107,18 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
     public Optional<DependenciesElement> dependenciesElementOption() {
         return childElementStream(DependenciesElement.class).findFirst();
     }
+
+    // TODO Take dependencyManagement into account, from same POM file and its ancestry
+    public ImmutableList<Dependency> dependencies(ParentContext parentContext, PomProperties properties) {
+        return dependenciesElementOption()
+                .map(elm -> elm.dependencyElements()
+                        .stream()
+                        .map(e -> new Dependency(
+                                e.groupIdOption(properties).orElseThrow(),
+                                e.artifactIdOption(properties).orElseThrow(),
+                                e.versionOption(properties).orElseThrow()
+                        ))
+                        .collect(ImmutableList.toImmutableList()))
+                .orElse(ImmutableList.of());
+    }
 }

@@ -26,6 +26,8 @@ import static eu.cdevreeze.yaidom4j.dom.immutabledom.ElementPredicates.hasName;
 
 /**
  * Dependency element in a Maven POM file.
+ * <p>
+ * No dependencyManagement context is taken into account in the methods offered by this class.
  *
  * @author Chris de Vreeze
  */
@@ -33,20 +35,6 @@ public record DependencyElement(Element backingElement) implements DependencyLik
 
     public DependencyElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "dependency")));
-    }
-
-    public Dependency dependency(ParentContext parentContext, PomProperties properties) {
-        return new Dependency(
-                groupIdOption(properties)
-                        .or(() -> parentContext.groupIdOption(properties))
-                        .orElseThrow(),
-                artifactIdOption(properties).orElseThrow(),
-                versionOption(properties)
-                        .or(() -> parentContext.versionOption(properties))
-                        .orElseThrow(),
-                classifierElementOption()
-                        .map(e -> e.resolvedValue(properties))
-        );
     }
 
     public Optional<OtherPomElement> classifierElementOption() {

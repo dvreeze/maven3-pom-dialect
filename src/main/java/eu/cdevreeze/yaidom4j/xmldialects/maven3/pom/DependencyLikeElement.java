@@ -45,6 +45,10 @@ public interface DependencyLikeElement extends AnyPomElement {
         return childElementStream(VersionElement.class).findFirst();
     }
 
+    /**
+     * Returns the optional version, resolving any properties if applicable.
+     * No dependencyManagement context is taken into account in this method.
+     */
     default Optional<String> versionOption(PomProperties properties) {
         return versionElementOption().map(e -> e.version(properties));
     }
