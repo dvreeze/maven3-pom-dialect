@@ -1,0 +1,12 @@
+patch-module eu.cdevreeze.yaidom4j {
+
+    // Lot of trial and error to get this patching to work
+    // Inspect target/test-classes/META-INF/maven/module-info-patch.args to see effect on javac command
+
+    // Also seems to work well with unnamed modules "Saxon.HE" and "apache.mime4j.core"
+
+    add-modules TEST-MODULE-PATH;
+    add-reads TEST-MODULE-PATH;
+
+    add-exports eu.cdevreeze.yaidom4j.xmldialects.maven3.pom to org.junit.jupiter.api;
+}
