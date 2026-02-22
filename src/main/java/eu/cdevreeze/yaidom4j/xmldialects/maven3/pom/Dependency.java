@@ -30,4 +30,8 @@ public record Dependency(
         String artifactId,
         String version,
         Optional<String> classifierOption) {
+
+    public Dependency(String groupId, String artifactId, String version) {
+        this(groupId, artifactId, version, Optional.empty());
+    }
 }

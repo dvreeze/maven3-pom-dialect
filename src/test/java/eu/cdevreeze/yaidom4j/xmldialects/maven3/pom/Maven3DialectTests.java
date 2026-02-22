@@ -26,7 +26,6 @@ import org.xml.sax.InputSource;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -61,7 +60,7 @@ class Maven3DialectTests {
         ProjectElement projectElement = ProjectElement.from(doc.documentElement());
 
         Dependency expectedDependency =
-                new Dependency("kms-api-examples", "kms-api-examples", "0.0.1-SNAPSHOT", Optional.empty());
+                new Dependency("kms-api-examples", "kms-api-examples", "0.0.1-SNAPSHOT");
         assertEquals(expectedDependency, projectElement.artifactAsDependency(parentContext, properties));
 
         List<Dependency> dependencies = projectElement.dependenciesElementOption()
@@ -70,11 +69,11 @@ class Maven3DialectTests {
                 .orElse(List.of());
 
         List<Dependency> expectedDependencies = List.of(
-                new Dependency("org.apache.httpcomponents", "httpclient", "4.3.2", Optional.empty()),
-                new Dependency("org.apache.httpcomponents", "httpclient-cache", "4.3.2", Optional.empty()),
-                new Dependency("org.apache.httpcomponents", "httpmime", "4.3.2", Optional.empty()),
-                new Dependency("com.fasterxml.jackson.core", "jackson-core", "2.4.0", Optional.empty()),
-                new Dependency("com.fasterxml.jackson.core", "jackson-databind", "2.4.0", Optional.empty())
+                new Dependency("org.apache.httpcomponents", "httpclient", "4.3.2"),
+                new Dependency("org.apache.httpcomponents", "httpclient-cache", "4.3.2"),
+                new Dependency("org.apache.httpcomponents", "httpmime", "4.3.2"),
+                new Dependency("com.fasterxml.jackson.core", "jackson-core", "2.4.0"),
+                new Dependency("com.fasterxml.jackson.core", "jackson-databind", "2.4.0")
         );
         assertEquals(expectedDependencies, dependencies);
     }

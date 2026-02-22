@@ -46,8 +46,7 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
                 artifactIdOption(properties).orElseThrow(),
                 versionOption(properties)
                         .or(() -> parentContext.versionOption(properties))
-                        .orElseThrow(),
-                Optional.empty()
+                        .orElseThrow()
         );
     }
 
