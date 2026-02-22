@@ -60,12 +60,18 @@ public record PomProperties(ImmutableMap<String, String> properties) {
 
             String propertyName = value.substring(idx + 2, nextIdx);
             Preconditions.checkState(!propertyName.isEmpty(), "Empty property name found");
-            String propertyValue = Objects.requireNonNull(properties.get(propertyName));
+            String propertyValue = Objects.requireNonNull(resolveProperty(propertyName));
 
             sb.append(propertyValue).append(value.substring(nextIdx + 1));
 
             // Recursion
             return expandInString(sb.toString(), recursionDepth + 1);
         }
+    }
+
+    private String resolveProperty(String propertyName) {
+        // TODO Resolve environment variables, system properties, etc.
+        // See https://www.sonatype.com/maven-complete-reference/properties-and-resource-filtering
+        return Objects.requireNonNull(properties.get(propertyName));
     }
 }
