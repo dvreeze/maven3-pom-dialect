@@ -15,15 +15,11 @@
  */
 
 /**
- * Module descriptor of yaidom4j-based maven3-pom-dialect. It provides a yaidom4-like query API
- * of elements in a Maven 3 POM file, but more type-safe and dedicated to the Maven 3 POM file XML
- * dialect.
+ * Console programs inspecting Maven POM files.
  *
  * @author Chris de Vreeze
  */
-module eu.cdevreeze.yaidom4j.xmldialects.maventhree {
-    requires transitive eu.cdevreeze.yaidom4j;
+@NullMarked
+package eu.cdevreeze.yaidom4j.xmldialects.maven3.console;
 
-    exports eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
-    exports eu.cdevreeze.yaidom4j.xmldialects.maven3.console;
-}
+import org.jspecify.annotations.NullMarked;

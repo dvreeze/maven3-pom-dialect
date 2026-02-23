@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
+package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
+
+import com.google.common.base.Preconditions;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /**
- * Module descriptor of yaidom4j-based maven3-pom-dialect. It provides a yaidom4-like query API
- * of elements in a Maven 3 POM file, but more type-safe and dedicated to the Maven 3 POM file XML
- * dialect.
+ * POM file, as the combination of a {@link ProjectElement} and {@link Path} of the POM file.
  *
  * @author Chris de Vreeze
  */
-module eu.cdevreeze.yaidom4j.xmldialects.maventhree {
-    requires transitive eu.cdevreeze.yaidom4j;
+public record PomFile(ProjectElement projectElement, Path path) {
 
-    exports eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
-    exports eu.cdevreeze.yaidom4j.xmldialects.maven3.console;
+    public PomFile {
+        Preconditions.checkArgument(Files.isRegularFile(path));
+    }
 }
