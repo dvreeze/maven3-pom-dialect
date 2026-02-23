@@ -108,6 +108,7 @@
     <!-- Do not forget to set environment variable GPG_PASSPHRASE or a user property having the same effect -->
     <!-- For the latter, see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseServerId -->
     <!-- IMPORTANT! Adapt this POM file; first have a look at https://central.sonatype.org/publish/publish-portal-maven/ -->
+    <!-- Example Maven command: "mvn clean deploy -Prelease -Dgpg.passphraseServerId=central -U" -->
     <profiles>
         <profile>
             <id>release</id>
