@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.NS;
@@ -47,7 +48,7 @@ import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.NS;
  * of interdependencies between these POM files in terms of modules and parent POMs. This output is in
  * XML format.
  * <p>
- * Only POM files named "pom.xml" are considered.
+ * Only POM files named "pom.xml" are considered. POM files in a "target" directory tree are ignored.
  *
  * @author Chris de Vreeze
  */
@@ -90,7 +91,7 @@ public class PomInterDependencyReporter {
         Element strippedProjectElement = pomFile.projectElement().backingElement()
                 .transformChildElementsToNodeLists(che ->
                         switch (che.name().getLocalPart()) {
-                            case "modelVersion", "groupId", "artifactId", "version", "modules", "parent" ->
+                            case "modelVersion", "groupId", "artifactId", "version", "packaging", "modules", "parent" ->
                                     List.of(che);
                             default -> List.of();
                         }
@@ -125,6 +126,9 @@ public class PomInterDependencyReporter {
             pomFiles = paths
                     .filter(Files::isRegularFile)
                     .filter(p -> p.getFileName().equals(Path.of("pom.xml")))
+                    .filter(p -> IntStream.range(0, p.getNameCount())
+                            .noneMatch(i -> p.getName(i).equals(Path.of("target")))
+                    )
                     .map(p -> parsePom(p, documentParser))
                     .collect(ImmutableList.toImmutableList());
         } catch (IOException e) {
@@ -142,6 +146,10 @@ public class PomInterDependencyReporter {
         return new PomFile(ProjectElement.from(rootElement), path);
     }
 
+    /**
+     * Returns true if the parameter node is an element node or text node.
+     * Hence, returns false if the parameter node is a comment node or processing instruction node.
+     */
     private boolean isElementOrText(Node node) {
         return node instanceof Element || node instanceof Text;
     }
