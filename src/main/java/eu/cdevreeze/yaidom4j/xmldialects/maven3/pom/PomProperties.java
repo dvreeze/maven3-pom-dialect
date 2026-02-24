@@ -16,8 +16,8 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
-import module java.base;
 import module com.google.common;
+import module java.base;
 
 import java.util.Objects;
 import java.util.Optional;

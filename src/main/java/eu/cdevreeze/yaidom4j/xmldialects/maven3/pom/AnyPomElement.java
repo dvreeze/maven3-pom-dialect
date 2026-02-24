@@ -16,10 +16,12 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
+import module eu.cdevreeze.yaidom4j;
+import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
-import javax.xml.namespace.QName;
-import java.util.stream.Stream;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Any element in a Maven POM file.
@@ -110,29 +112,32 @@ public interface AnyPomElement {
     }
 
     static AnyPomElement create(Element backingElement) {
-        return switch (backingElement.name().toString()) {
-            case "{http://maven.apache.org/POM/4.0.0}project" -> new ProjectElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}modelVersion" -> new ModelVersionElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}parent" -> new ParentElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}groupId" -> new GroupIdElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}artifactId" -> new ArtifactIdElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}version" -> new VersionElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}packaging" -> new PackagingElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}name" -> new NameElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}description" -> new DescriptionElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}url" -> new UrlElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}modules" -> new ModulesElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}module" -> new ModuleElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}properties" -> new PropertiesElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}dependencyManagement" ->
-                    new DependencyManagementElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}dependencies" -> new DependenciesElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}dependency" -> new DependencyElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}reporting" -> new ReportingElement(backingElement);
-            case "{http://maven.apache.org/POM/4.0.0}build" -> new BuildElement(backingElement);
-            default -> new OtherPomElement(backingElement);
-        };
+        return Optional.ofNullable(constructorMap.get(backingElement.name()))
+                .map(func -> func.apply(backingElement))
+                .orElse(new OtherPomElement(backingElement));
     }
 
     String NS = "http://maven.apache.org/POM/4.0.0";
+
+    ImmutableMap<QName, Function<Element, AnyPomElement>> constructorMap =
+            ImmutableMap.<QName, Function<Element, AnyPomElement>>builder()
+                    .put(new QName(NS, "project"), ProjectElement::new)
+                    .put(new QName(NS, "modelVersion"), ModelVersionElement::new)
+                    .put(new QName(NS, "parent"), ParentElement::new)
+                    .put(new QName(NS, "groupId"), GroupIdElement::new)
+                    .put(new QName(NS, "artifactId"), ArtifactIdElement::new)
+                    .put(new QName(NS, "version"), VersionElement::new)
+                    .put(new QName(NS, "packaging"), PackagingElement::new)
+                    .put(new QName(NS, "name"), NameElement::new)
+                    .put(new QName(NS, "description"), DescriptionElement::new)
+                    .put(new QName(NS, "url"), UrlElement::new)
+                    .put(new QName(NS, "modules"), ModulesElement::new)
+                    .put(new QName(NS, "module"), ModuleElement::new)
+                    .put(new QName(NS, "properties"), PropertiesElement::new)
+                    .put(new QName(NS, "dependencyManagement"), DependencyManagementElement::new)
+                    .put(new QName(NS, "dependencies"), DependenciesElement::new)
+                    .put(new QName(NS, "dependency"), DependencyElement::new)
+                    .put(new QName(NS, "reporting"), ReportingElement::new)
+                    .put(new QName(NS, "build"), BuildElement::new)
+                    .build();
 }
