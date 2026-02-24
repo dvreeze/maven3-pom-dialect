@@ -16,16 +16,12 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
-import com.google.common.collect.ImmutableMap;
+import module java.base;
+import module eu.cdevreeze.yaidom4j;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.xml.sax.InputSource;
-
-import java.io.InputStream;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

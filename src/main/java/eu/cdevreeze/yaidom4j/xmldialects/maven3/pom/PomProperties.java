@@ -16,8 +16,8 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
+import module java.base;
+import module com.google.common;
 
 import java.util.Objects;
 import java.util.Optional;

@@ -16,11 +16,9 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
+import module java.base;
+import module eu.cdevreeze.yaidom4j;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
-import org.xml.sax.InputSource;
-
-import java.io.InputStream;
 
 /**
  * Factory creating the super POM. Note that the super POM has no "target Maven coordinates".

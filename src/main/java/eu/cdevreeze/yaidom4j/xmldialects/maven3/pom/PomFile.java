@@ -16,10 +16,8 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
+import module java.base;
 import com.google.common.base.Preconditions;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * POM file, as the combination of a {@link ProjectElement} and {@link Path} of the POM file.

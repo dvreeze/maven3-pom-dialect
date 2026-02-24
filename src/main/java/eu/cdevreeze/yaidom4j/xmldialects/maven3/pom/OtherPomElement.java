@@ -16,6 +16,7 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
+import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
 /**

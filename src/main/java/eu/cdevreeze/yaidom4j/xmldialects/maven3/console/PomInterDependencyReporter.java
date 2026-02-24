@@ -16,29 +16,18 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.console;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import eu.cdevreeze.yaidom4j.core.NamespaceScope;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.*;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParser;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentPrinter;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentPrinters;
+import module eu.cdevreeze.yaidom4j;
+import module java.base;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Node;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Text;
 import eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.PomFile;
 import eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.ProjectElement;
 
-import javax.xml.namespace.QName;
-import javax.xml.transform.stream.StreamResult;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.NS;
 

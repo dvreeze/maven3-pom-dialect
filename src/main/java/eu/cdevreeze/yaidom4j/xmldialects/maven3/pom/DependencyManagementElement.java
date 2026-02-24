@@ -16,10 +16,10 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
-import com.google.common.base.Preconditions;
+import module java.base;
+import module eu.cdevreeze.yaidom4j;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
-import javax.xml.namespace.QName;
 import java.util.Optional;
 
 /**
