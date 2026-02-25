@@ -16,8 +16,10 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -97,10 +99,17 @@ class Maven3DialectTests {
     void testElementClassNamesMatchingElementLocalNames() {
         ProjectElement projectElement = ProjectElement.from(doc.documentElement());
 
-//        assertEquals(
-//                projectElement.descendantElementOrSelfStream().filter(e -> !e.name().getNamespaceURI().equals(NS)).toList(),
-//                projectElement.descendantElementOrSelfStream().filter(e -> e instanceof OtherPomElement).toList()
-//        );
+        Element docElemWithoutProperties = doc.documentElement().transformDescendantElementsOrSelf(elm ->
+                (elm.name().equals(new QName(NS, "properties"))) ?
+                        elm.withChildren(ImmutableList.of()) :
+                        elm
+        );
+        ProjectElement projectElementWithoutProperties = ProjectElement.from(docElemWithoutProperties);
+
+        assertEquals(
+                projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> !e.name().getNamespaceURI().equals(NS)).toList(),
+                projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> e instanceof OtherPomElement).toList()
+        );
 
         assertTrue(
                 projectElement

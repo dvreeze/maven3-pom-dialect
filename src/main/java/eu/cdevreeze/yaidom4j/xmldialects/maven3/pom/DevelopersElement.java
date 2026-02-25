@@ -30,4 +30,8 @@ public record DevelopersElement(Element backingElement) implements AnyPomElement
     public DevelopersElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "developers")));
     }
+
+    public ImmutableList<DeveloperElement> developerElements() {
+        return childElementStream(DeveloperElement.class).collect(ImmutableList.toImmutableList());
+    }
 }

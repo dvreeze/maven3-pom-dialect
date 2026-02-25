@@ -21,17 +21,17 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
 /**
- * Repositories element in a Maven POM file.
+ * Notifiers element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record RepositoriesElement(Element backingElement) implements AnyPomElement {
+public record NotifiersElement(Element backingElement) implements AnyPomElement {
 
-    public RepositoriesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "repositories")));
+    public NotifiersElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "notifiers")));
     }
 
-    public ImmutableList<RepositoryElement> repositoryElements() {
-        return childElementStream(RepositoryElement.class).collect(ImmutableList.toImmutableList());
+    public ImmutableList<NotifierElement> notifierElements() {
+        return childElementStream(NotifierElement.class).collect(ImmutableList.toImmutableList());
     }
 }

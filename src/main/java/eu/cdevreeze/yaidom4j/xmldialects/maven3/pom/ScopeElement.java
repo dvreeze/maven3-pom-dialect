@@ -21,17 +21,13 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
 /**
- * Repositories element in a Maven POM file.
+ * Scope element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record RepositoriesElement(Element backingElement) implements AnyPomElement {
+public record ScopeElement(Element backingElement) implements AnyPomElement {
 
-    public RepositoriesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "repositories")));
-    }
-
-    public ImmutableList<RepositoryElement> repositoryElements() {
-        return childElementStream(RepositoryElement.class).collect(ImmutableList.toImmutableList());
+    public ScopeElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "scope")));
     }
 }

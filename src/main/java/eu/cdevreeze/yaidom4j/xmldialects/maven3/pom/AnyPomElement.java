@@ -164,5 +164,17 @@ public interface AnyPomElement {
                     .put(new QName(NS, "plugin"), PluginElement::new)
                     .put(new QName(NS, "profiles"), ProfilesElement::new)
                     .put(new QName(NS, "profile"), ProfileElement::new)
+                    .put(new QName(NS, "comments"), CommentsElement::new)
+                    .put(new QName(NS, "configuration"), ConfigurationElement::new)
+                    .put(new QName(NS, "distribution"), DistributionElement::new)
+                    .put(new QName(NS, "executions"), ExecutionsElement::new)
+                    .put(new QName(NS, "execution"), ExecutionElement::new)
+                    .put(new QName(NS, "notifiers"), NotifiersElement::new)
+                    .put(new QName(NS, "notifier"), NotifierElement::new)
+                    .put(new QName(NS, "scope"), ScopeElement::new)
+                    .put(new QName(NS, "type"), TypeElement::new)
+                    .put(new QName(NS, "system"), SystemElement::new)
+                    .put(new QName(NS, "source"), SourceElement::new)
+                    .put(new QName(NS, "target"), TargetElement::new)
                     .build();
 }

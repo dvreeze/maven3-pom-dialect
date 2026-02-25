@@ -30,4 +30,8 @@ public record ProfilesElement(Element backingElement) implements AnyPomElement {
     public ProfilesElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "profiles")));
     }
+
+    public ImmutableList<ProfileElement> profileElements() {
+        return childElementStream(ProfileElement.class).collect(ImmutableList.toImmutableList());
+    }
 }

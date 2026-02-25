@@ -21,17 +21,17 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
 /**
- * Repositories element in a Maven POM file.
+ * Executions element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record RepositoriesElement(Element backingElement) implements AnyPomElement {
+public record ExecutionsElement(Element backingElement) implements AnyPomElement {
 
-    public RepositoriesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "repositories")));
+    public ExecutionsElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "executions")));
     }
 
-    public ImmutableList<RepositoryElement> repositoryElements() {
-        return childElementStream(RepositoryElement.class).collect(ImmutableList.toImmutableList());
+    public ImmutableList<ExecutionElement> executionElements() {
+        return childElementStream(ExecutionElement.class).collect(ImmutableList.toImmutableList());
     }
 }

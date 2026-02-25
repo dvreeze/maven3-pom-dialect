@@ -92,6 +92,22 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return childElementStream(PropertiesElement.class).findFirst();
     }
 
+    public Optional<LicensesElement> licensesElementOption() {
+        return childElementStream(LicensesElement.class).findFirst();
+    }
+
+    public Optional<DevelopersElement> developersElementOption() {
+        return childElementStream(DevelopersElement.class).findFirst();
+    }
+
+    public Optional<ContributorsElement> contributorsElementOption() {
+        return childElementStream(ContributorsElement.class).findFirst();
+    }
+
+    public Optional<PrerequisitesElement> prerequisitesElementOption() {
+        return childElementStream(PrerequisitesElement.class).findFirst();
+    }
+
     public Optional<ModulesElement> modulesElementOption() {
         return childElementStream(ModulesElement.class).findFirst();
     }
@@ -110,9 +126,19 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return childElementStream(DependenciesElement.class).findFirst();
     }
 
+    public Optional<RepositoriesElement> repositoriesElementOption() {
+        return childElementStream(RepositoriesElement.class).findFirst();
+    }
+
+    public Optional<PluginRepositoriesElement> pluginRepositoriesElementOption() {
+        return childElementStream(PluginRepositoriesElement.class).findFirst();
+    }
+
     public Optional<BuildElement> buildElementOption() {
         return childElementStream(BuildElement.class).findFirst();
     }
 
-    // TODO Profiles, and data retrieval specific to profile
+    public Optional<ProfilesElement> profilesElementOption() {
+        return childElementStream(ProfilesElement.class).findFirst();
+    }
 }

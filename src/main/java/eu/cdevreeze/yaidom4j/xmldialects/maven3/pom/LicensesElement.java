@@ -30,4 +30,8 @@ public record LicensesElement(Element backingElement) implements AnyPomElement {
     public LicensesElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "licenses")));
     }
+
+    public ImmutableList<LicenseElement> licenseElements() {
+        return childElementStream(LicenseElement.class).collect(ImmutableList.toImmutableList());
+    }
 }

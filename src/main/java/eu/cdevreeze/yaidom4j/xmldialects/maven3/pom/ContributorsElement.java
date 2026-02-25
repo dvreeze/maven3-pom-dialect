@@ -30,4 +30,8 @@ public record ContributorsElement(Element backingElement) implements AnyPomEleme
     public ContributorsElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "contributors")));
     }
+
+    public ImmutableList<ContributorElement> contributorElements() {
+        return childElementStream(ContributorElement.class).collect(ImmutableList.toImmutableList());
+    }
 }

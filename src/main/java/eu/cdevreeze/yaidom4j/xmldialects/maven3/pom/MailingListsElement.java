@@ -30,4 +30,8 @@ public record MailingListsElement(Element backingElement) implements AnyPomEleme
     public MailingListsElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "mailingLists")));
     }
+
+    public ImmutableList<MailingListElement> mailingListElements() {
+        return childElementStream(MailingListElement.class).collect(ImmutableList.toImmutableList());
+    }
 }

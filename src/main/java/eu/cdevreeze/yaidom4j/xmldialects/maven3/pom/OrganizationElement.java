@@ -20,6 +20,8 @@ import module eu.cdevreeze.yaidom4j;
 import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
+import java.util.Optional;
+
 /**
  * Organization element in a Maven POM file.
  *
@@ -29,5 +31,13 @@ public record OrganizationElement(Element backingElement) implements AnyPomEleme
 
     public OrganizationElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "organization")));
+    }
+
+    public Optional<NameElement> nameElementOption() {
+        return childElementStream(NameElement.class).findFirst();
+    }
+
+    public Optional<UrlElement> urlElementOption() {
+        return childElementStream(UrlElement.class).findFirst();
     }
 }

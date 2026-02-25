@@ -30,4 +30,8 @@ public record PluginRepositoriesElement(Element backingElement) implements AnyPo
     public PluginRepositoriesElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "pluginRepositories")));
     }
+
+    public ImmutableList<PluginRepositoryElement> pluginRepositoryElements() {
+        return childElementStream(PluginRepositoryElement.class).collect(ImmutableList.toImmutableList());
+    }
 }
