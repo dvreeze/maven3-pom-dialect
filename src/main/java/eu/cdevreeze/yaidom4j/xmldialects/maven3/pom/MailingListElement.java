@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record MailingListElement(Element backingElement) implements AnyPomElement {
 
     public MailingListElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "mailingList")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "mailingList")));
     }
 }

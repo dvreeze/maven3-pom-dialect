@@ -34,12 +34,12 @@ import static eu.cdevreeze.yaidom4j.dom.immutabledom.ElementPredicates.hasName;
 public record DependencyElement(Element backingElement) implements DependencyLikeElement {
 
     public DependencyElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "dependency")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "dependency")));
     }
 
     public Optional<OtherPomElement> classifierElementOption() {
         return backingElement()
-                .childElementStream(hasName(NS, "classifier"))
+                .childElementStream(hasName(MAVEN_POM_NS, "classifier"))
                 .findFirst()
                 .map(OtherPomElement::new);
     }

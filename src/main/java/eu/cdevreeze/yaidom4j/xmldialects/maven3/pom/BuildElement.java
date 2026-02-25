@@ -30,7 +30,7 @@ import java.util.Optional;
 public record BuildElement(Element backingElement) implements AnyPomElement {
 
     public BuildElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "build")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "build")));
     }
 
     public Optional<PluginManagementElement> pluginManagementElementOption() {

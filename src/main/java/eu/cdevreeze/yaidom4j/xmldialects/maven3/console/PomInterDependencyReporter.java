@@ -29,7 +29,7 @@ import java.nio.file.Files;
 import java.util.Objects;
 import java.util.Optional;
 
-import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.NS;
+import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_POM_NS;
 
 /**
  * Program that shows how a set of POM files "hang together", in terms of Maven modules and parent POMs.
@@ -70,7 +70,7 @@ public class PomInterDependencyReporter {
                 pomFiles.stream().map(this::generateReportForPom).collect(ImmutableList.toImmutableList());
         Element rootElem = Nodes.elem(new QName("pomFiles"))
                 .plusChildren(childElems)
-                .notUndeclaringPrefixes(NamespaceScope.of("", NS))
+                .notUndeclaringPrefixes(NamespaceScope.of("", MAVEN_POM_NS))
                 .removeInterElementWhitespace();
         return new Document(Optional.empty(), ImmutableList.of(rootElem));
     }
@@ -131,7 +131,7 @@ public class PomInterDependencyReporter {
         Preconditions.checkArgument(Files.isRegularFile(path));
 
         Element rootElement = documentParser.parse(path.toUri()).documentElement();
-        Preconditions.checkState(rootElement.name().equals(new QName(NS, "project")));
+        Preconditions.checkState(rootElement.name().equals(new QName(MAVEN_POM_NS, "project")));
         return new PomFile(ProjectElement.from(rootElement), path);
     }
 

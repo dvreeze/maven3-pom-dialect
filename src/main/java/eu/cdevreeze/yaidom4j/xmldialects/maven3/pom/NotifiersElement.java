@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record NotifiersElement(Element backingElement) implements AnyPomElement {
 
     public NotifiersElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "notifiers")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "notifiers")));
     }
 
     public ImmutableList<NotifierElement> notifierElements() {

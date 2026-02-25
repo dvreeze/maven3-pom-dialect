@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record DependenciesElement(Element backingElement) implements AnyPomElement {
 
     public DependenciesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "dependencies")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "dependencies")));
     }
 
     public ImmutableList<DependencyElement> dependencyElements() {

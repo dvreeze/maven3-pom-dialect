@@ -30,7 +30,7 @@ import java.util.Optional;
 public record ProjectElement(Element backingElement) implements DependencyLikeElement {
 
     public ProjectElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "project")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "project")));
     }
 
     public static ProjectElement from(Element backingElement) {

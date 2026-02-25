@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record PluginsElement(Element backingElement) implements AnyPomElement {
 
     public PluginsElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "plugins")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "plugins")));
     }
 
     public ImmutableList<PluginElement> pluginElements() {

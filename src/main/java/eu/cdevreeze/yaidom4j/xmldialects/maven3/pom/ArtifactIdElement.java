@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ArtifactIdElement(Element backingElement) implements AnyPomElement {
 
     public ArtifactIdElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "artifactId")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "artifactId")));
     }
 
     public String artifactId(PomProperties properties) {

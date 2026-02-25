@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ModelVersionElement(Element backingElement) implements AnyPomElement {
 
     public ModelVersionElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "modelVersion")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "modelVersion")));
     }
 }

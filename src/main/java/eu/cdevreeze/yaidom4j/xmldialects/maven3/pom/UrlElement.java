@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record UrlElement(Element backingElement) implements AnyPomElement {
 
     public UrlElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "url")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "url")));
     }
 }

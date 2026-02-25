@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ParentElement(Element backingElement) implements DependencyLikeElement {
 
     public ParentElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "parent")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "parent")));
     }
 }

@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record VersionElement(Element backingElement) implements AnyPomElement {
 
     public VersionElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "version")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "version")));
     }
 
     public String version(PomProperties properties) {

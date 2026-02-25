@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record CiManagementElement(Element backingElement) implements AnyPomElement {
 
     public CiManagementElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "ciManagement")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "ciManagement")));
     }
 }

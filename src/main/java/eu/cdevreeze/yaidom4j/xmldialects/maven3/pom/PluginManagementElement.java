@@ -30,7 +30,7 @@ import java.util.Optional;
 public record PluginManagementElement(Element backingElement) implements AnyPomElement {
 
     public PluginManagementElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "pluginManagement")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "pluginManagement")));
     }
 
     public Optional<PluginsElement> pluginsElementOption() {

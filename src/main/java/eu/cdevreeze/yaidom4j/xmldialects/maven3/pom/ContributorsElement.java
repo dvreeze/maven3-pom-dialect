@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ContributorsElement(Element backingElement) implements AnyPomElement {
 
     public ContributorsElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "contributors")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "contributors")));
     }
 
     public ImmutableList<ContributorElement> contributorElements() {

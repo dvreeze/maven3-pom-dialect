@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ModulesElement(Element backingElement) implements AnyPomElement {
 
     public ModulesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "modules")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "modules")));
     }
 
     public ImmutableList<ModuleElement> moduleElements() {

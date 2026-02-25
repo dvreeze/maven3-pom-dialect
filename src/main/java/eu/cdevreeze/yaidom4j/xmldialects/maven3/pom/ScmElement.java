@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ScmElement(Element backingElement) implements AnyPomElement {
 
     public ScmElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "scm")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "scm")));
     }
 }

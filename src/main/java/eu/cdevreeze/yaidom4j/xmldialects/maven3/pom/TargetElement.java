@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record TargetElement(Element backingElement) implements AnyPomElement {
 
     public TargetElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "target")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "target")));
     }
 }

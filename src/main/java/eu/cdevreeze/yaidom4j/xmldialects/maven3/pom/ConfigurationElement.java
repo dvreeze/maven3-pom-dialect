@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ConfigurationElement(Element backingElement) implements AnyPomElement {
 
     public ConfigurationElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "configuration")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "configuration")));
     }
 }

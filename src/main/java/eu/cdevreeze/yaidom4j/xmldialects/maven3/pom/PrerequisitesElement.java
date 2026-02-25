@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record PrerequisitesElement(Element backingElement) implements AnyPomElement {
 
     public PrerequisitesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "prerequisites")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "prerequisites")));
     }
 }

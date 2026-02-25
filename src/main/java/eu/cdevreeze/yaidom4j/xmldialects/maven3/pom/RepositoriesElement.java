@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record RepositoriesElement(Element backingElement) implements AnyPomElement {
 
     public RepositoriesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "repositories")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "repositories")));
     }
 
     public ImmutableList<RepositoryElement> repositoryElements() {

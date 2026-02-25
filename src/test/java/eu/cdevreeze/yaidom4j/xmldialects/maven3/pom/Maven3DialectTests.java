@@ -30,7 +30,7 @@ import javax.xml.namespace.QName;
 import java.io.InputStream;
 import java.util.List;
 
-import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.NS;
+import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_POM_NS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -88,7 +88,7 @@ class Maven3DialectTests {
                 3,
                 projectElement.descendantElementOrSelfStream(DependencyElement.class)
                         .flatMap(AnyPomElement::childElementStream)
-                        .filter(e -> e.name().equals(new QName(NS, "type")))
+                        .filter(e -> e.name().equals(new QName(MAVEN_POM_NS, "type")))
                         .count()
         );
 
@@ -100,21 +100,21 @@ class Maven3DialectTests {
         ProjectElement projectElement = ProjectElement.from(doc.documentElement());
 
         Element docElemWithoutProperties = doc.documentElement().transformDescendantElementsOrSelf(elm ->
-                (elm.name().equals(new QName(NS, "properties"))) ?
+                (elm.name().equals(new QName(MAVEN_POM_NS, "properties"))) ?
                         elm.withChildren(ImmutableList.of()) :
                         elm
         );
         ProjectElement projectElementWithoutProperties = ProjectElement.from(docElemWithoutProperties);
 
         assertEquals(
-                projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> !e.name().getNamespaceURI().equals(NS)).toList(),
+                projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> !e.name().getNamespaceURI().equals(MAVEN_POM_NS)).toList(),
                 projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> e instanceof OtherPomElement).toList()
         );
 
         assertTrue(
                 projectElement
                         .descendantElementOrSelfStream()
-                        .filter(e -> !e.name().getNamespaceURI().equals(NS))
+                        .filter(e -> !e.name().getNamespaceURI().equals(MAVEN_POM_NS))
                         .allMatch(otherElm ->
                                 projectElement.descendantElementStream(PropertiesElement.class)
                                         .anyMatch(propsElm -> propsElm.descendantElementStream().anyMatch(de -> de.equals(otherElm)))

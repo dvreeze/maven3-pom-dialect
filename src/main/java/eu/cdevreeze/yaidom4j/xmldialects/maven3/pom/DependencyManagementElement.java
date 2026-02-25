@@ -30,7 +30,7 @@ import java.util.Optional;
 public record DependencyManagementElement(Element backingElement) implements AnyPomElement {
 
     public DependencyManagementElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "dependencyManagement")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "dependencyManagement")));
     }
 
     public Optional<DependenciesElement> dependenciesElementOption() {

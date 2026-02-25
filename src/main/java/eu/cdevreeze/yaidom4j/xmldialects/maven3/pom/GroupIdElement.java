@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record GroupIdElement(Element backingElement) implements AnyPomElement {
 
     public GroupIdElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "groupId")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "groupId")));
     }
 
     public String groupId(PomProperties properties) {

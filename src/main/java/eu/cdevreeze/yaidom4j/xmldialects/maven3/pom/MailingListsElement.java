@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record MailingListsElement(Element backingElement) implements AnyPomElement {
 
     public MailingListsElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "mailingLists")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "mailingLists")));
     }
 
     public ImmutableList<MailingListElement> mailingListElements() {

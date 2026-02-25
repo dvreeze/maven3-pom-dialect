@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record DistributionElement(Element backingElement) implements AnyPomElement {
 
     public DistributionElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "distribution")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "distribution")));
     }
 }

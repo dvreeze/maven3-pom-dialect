@@ -30,7 +30,7 @@ import java.util.Optional;
 public record OrganizationElement(Element backingElement) implements AnyPomElement {
 
     public OrganizationElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "organization")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "organization")));
     }
 
     public Optional<NameElement> nameElementOption() {

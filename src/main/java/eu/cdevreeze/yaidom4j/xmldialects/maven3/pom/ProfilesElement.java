@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ProfilesElement(Element backingElement) implements AnyPomElement {
 
     public ProfilesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "profiles")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "profiles")));
     }
 
     public ImmutableList<ProfileElement> profileElements() {

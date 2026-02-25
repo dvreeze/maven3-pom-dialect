@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record LicensesElement(Element backingElement) implements AnyPomElement {
 
     public LicensesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "licenses")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "licenses")));
     }
 
     public ImmutableList<LicenseElement> licenseElements() {

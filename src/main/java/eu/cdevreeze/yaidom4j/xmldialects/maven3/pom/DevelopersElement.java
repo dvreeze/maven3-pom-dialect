@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record DevelopersElement(Element backingElement) implements AnyPomElement {
 
     public DevelopersElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "developers")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "developers")));
     }
 
     public ImmutableList<DeveloperElement> developerElements() {

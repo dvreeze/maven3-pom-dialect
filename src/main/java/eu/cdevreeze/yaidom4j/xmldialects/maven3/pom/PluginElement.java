@@ -30,6 +30,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record PluginElement(Element backingElement) implements DependencyLikeElement {
 
     public PluginElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "plugin")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "plugin")));
     }
 }

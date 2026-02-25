@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record InceptionYearElement(Element backingElement) implements AnyPomElement {
 
     public InceptionYearElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "inceptionYear")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "inceptionYear")));
     }
 }

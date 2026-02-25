@@ -28,7 +28,7 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record PropertiesElement(Element backingElement) implements AnyPomElement {
 
     public PropertiesElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "properties")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "properties")));
     }
 
     public ImmutableMap<String, String> rawProperties() {

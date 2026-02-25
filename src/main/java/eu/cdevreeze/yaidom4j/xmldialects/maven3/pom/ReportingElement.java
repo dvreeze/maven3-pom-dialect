@@ -28,6 +28,6 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 public record ReportingElement(Element backingElement) implements AnyPomElement {
 
     public ReportingElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "reporting")));
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "reporting")));
     }
 }
