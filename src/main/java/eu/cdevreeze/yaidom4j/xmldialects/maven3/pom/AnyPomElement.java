@@ -176,5 +176,9 @@ public interface AnyPomElement {
                     .put(new QName(MAVEN_POM_NS, "system"), SystemElement::new)
                     .put(new QName(MAVEN_POM_NS, "source"), SourceElement::new)
                     .put(new QName(MAVEN_POM_NS, "target"), TargetElement::new)
+                    .put(new QName(MAVEN_POM_NS, "id"), IdElement::new)
+                    .put(new QName(MAVEN_POM_NS, "phase"), PhaseElement::new)
+                    .put(new QName(MAVEN_POM_NS, "goals"), GoalsElement::new)
+                    .put(new QName(MAVEN_POM_NS, "goal"), GoalElement::new)
                     .build();
 }

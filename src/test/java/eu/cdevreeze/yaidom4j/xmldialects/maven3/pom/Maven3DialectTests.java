@@ -16,6 +16,7 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
@@ -30,6 +31,7 @@ import javax.xml.namespace.QName;
 import java.io.InputStream;
 import java.util.List;
 
+import static eu.cdevreeze.yaidom4j.dom.immutabledom.ElementPredicates.hasLocalName;
 import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_POM_NS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,11 +44,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Maven3DialectTests {
 
-    private Document doc;
+    private Document doc1;
+    private Document doc2;
 
     @BeforeAll
     void parseDocuments() {
-        doc = parseDocument("/sample-pom.xml");
+        doc1 = parseDocument("/sample-pom.xml");
+        doc2 = parseDocument("/large-sample-pom.xml");
     }
 
     private Document parseDocument(String xmlClasspathResource) {
@@ -57,7 +61,7 @@ class Maven3DialectTests {
 
     @Test
     void testCountElementNames() {
-        ProjectElement projectElement = ProjectElement.from(doc.documentElement());
+        ProjectElement projectElement = ProjectElement.from(doc1.documentElement());
 
         assertEquals(1, projectElement.descendantElementOrSelfStream(ProjectElement.class).count());
 
@@ -97,9 +101,9 @@ class Maven3DialectTests {
 
     @Test
     void testElementClassNamesMatchingElementLocalNames() {
-        ProjectElement projectElement = ProjectElement.from(doc.documentElement());
+        ProjectElement projectElement = ProjectElement.from(doc1.documentElement());
 
-        Element docElemWithoutProperties = doc.documentElement().transformDescendantElementsOrSelf(elm ->
+        Element docElemWithoutProperties = doc1.documentElement().transformDescendantElementsOrSelf(elm ->
                 (elm.name().equals(new QName(MAVEN_POM_NS, "properties"))) ?
                         elm.withChildren(ImmutableList.of()) :
                         elm
@@ -131,10 +135,42 @@ class Maven3DialectTests {
     }
 
     @Test
+    void testElementClassNamesMatchingElementLocalNamesInLargePom() {
+        ProjectElement projectElement = ProjectElement.from(doc2.documentElement());
+        Preconditions.checkState(projectElement.descendantElementOrSelfStream().count() >= 800);
+
+        assertEquals(
+                projectElement.backingElement().descendantElementOrSelfStream().count(),
+                projectElement.descendantElementOrSelfStream().count()
+        );
+
+        assertEquals(
+                projectElement.backingElement().descendantElementOrSelfStream(hasLocalName("dependency")).count(),
+                projectElement.descendantElementOrSelfStream(DependencyElement.class).count()
+        );
+        assertEquals(
+                projectElement.backingElement().descendantElementOrSelfStream(hasLocalName("plugin")).count(),
+                projectElement.descendantElementOrSelfStream(PluginElement.class).count()
+        );
+        assertEquals(
+                projectElement.backingElement().descendantElementOrSelfStream(hasLocalName("groupId")).count(),
+                projectElement.descendantElementOrSelfStream(GroupIdElement.class).count()
+        );
+
+        assertTrue(
+                projectElement.descendantElementOrSelfStream()
+                        .filter(e -> !(e instanceof OtherPomElement))
+                        .allMatch(e -> e.getClass().getSimpleName().equals(
+                                capitalize(e.name().getLocalPart()) + "Element"
+                        ))
+        );
+    }
+
+    @Test
     void testQueryDependencies() {
         PomProperties extraProperties = new PomProperties(ImmutableMap.of("revision", "0.0.1-SNAPSHOT"));
 
-        ProjectElement projectElement = ProjectElement.from(doc.documentElement());
+        ProjectElement projectElement = ProjectElement.from(doc1.documentElement());
         // TODO Use super POM
         EffectivePom effectivePom = EffectivePom.from(projectElement);
 
@@ -158,7 +194,7 @@ class Maven3DialectTests {
     void testQueryPlugins() {
         PomProperties extraProperties = new PomProperties(ImmutableMap.of("revision", "0.0.1-SNAPSHOT"));
 
-        ProjectElement projectElement = ProjectElement.from(doc.documentElement());
+        ProjectElement projectElement = ProjectElement.from(doc1.documentElement());
         // TODO Use super POM
         EffectivePom effectivePom = EffectivePom.from(projectElement);
 
