@@ -94,6 +94,34 @@ class Maven3DialectTests {
     }
 
     @Test
+    void testElementClassNamesMatchingElementLocalNames() {
+        ProjectElement projectElement = ProjectElement.from(doc.documentElement());
+
+//        assertEquals(
+//                projectElement.descendantElementOrSelfStream().filter(e -> !e.name().getNamespaceURI().equals(NS)).toList(),
+//                projectElement.descendantElementOrSelfStream().filter(e -> e instanceof OtherPomElement).toList()
+//        );
+
+        assertTrue(
+                projectElement
+                        .descendantElementOrSelfStream()
+                        .filter(e -> !e.name().getNamespaceURI().equals(NS))
+                        .allMatch(otherElm ->
+                                projectElement.descendantElementStream(PropertiesElement.class)
+                                        .anyMatch(propsElm -> propsElm.descendantElementStream().anyMatch(de -> de.equals(otherElm)))
+                        )
+        );
+
+        assertTrue(
+                projectElement.descendantElementOrSelfStream()
+                        .filter(e -> !(e instanceof OtherPomElement))
+                        .allMatch(e -> e.getClass().getSimpleName().equals(
+                                capitalize(e.name().getLocalPart()) + "Element"
+                        ))
+        );
+    }
+
+    @Test
     void testQueryDependencies() {
         PomProperties extraProperties = new PomProperties(ImmutableMap.of("revision", "0.0.1-SNAPSHOT"));
 
@@ -130,5 +158,12 @@ class Maven3DialectTests {
         Dependency expectedPluginAsDependency =
                 new Dependency("org.apache.maven", "maven-compiler-plugin", "3.5.1");
         assertEquals(List.of(expectedPluginAsDependency), pluginsAsDependencies);
+    }
+
+    private static String capitalize(String string) {
+        if (string.isEmpty()) {
+            return string;
+        }
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
     }
 }
