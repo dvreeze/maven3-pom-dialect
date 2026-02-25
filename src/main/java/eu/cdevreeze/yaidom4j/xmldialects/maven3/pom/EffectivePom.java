@@ -66,4 +66,25 @@ public record EffectivePom(ProjectElement projectElement) {
                         .collect(ImmutableList.toImmutableList()))
                 .orElse(ImmutableList.of());
     }
+
+    /**
+     * Returns the plugins in the "build/plugins" section, not the "build/pluginManagement" section.
+     * The result is returned as Lists of {@link Dependency} objects.
+     */
+    public ImmutableList<Dependency> pluginsAsDependencies(PomProperties extraProperties) {
+        PomProperties pomProperties = projectElement().resultProperties(PomProperties.empty())
+                .add(extraProperties);
+
+        return projectElement().buildElementOption()
+                .flatMap(BuildElement::pluginsElementOption)
+                .map(elm -> elm.pluginElements()
+                        .stream()
+                        .map(e -> new Dependency(
+                                e.groupIdOption(pomProperties).orElse(APACHE_MAVEN_BASE_GROUP_ID),
+                                e.artifactIdOption(pomProperties).orElseThrow(),
+                                e.versionOption(pomProperties).orElseThrow()
+                        ))
+                        .collect(ImmutableList.toImmutableList()))
+                .orElse(ImmutableList.of());
+    }
 }

@@ -110,7 +110,9 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return childElementStream(DependenciesElement.class).findFirst();
     }
 
-    // TODO Plugins, plugin management etc.
+    public Optional<BuildElement> buildElementOption() {
+        return childElementStream(BuildElement.class).findFirst();
+    }
 
     // TODO Profiles, and data retrieval specific to profile
 }

@@ -20,24 +20,18 @@ import module eu.cdevreeze.yaidom4j;
 import module java.base;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 
-import java.util.Optional;
-
 /**
- * Build element in a Maven POM file.
+ * Plugins element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record BuildElement(Element backingElement) implements AnyPomElement {
+public record PluginsElement(Element backingElement) implements AnyPomElement {
 
-    public BuildElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "build")));
+    public PluginsElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(NS, "plugins")));
     }
 
-    public Optional<PluginManagementElement> pluginManagementElementOption() {
-        return childElementStream(PluginManagementElement.class).findFirst();
-    }
-
-    public Optional<PluginsElement> pluginsElementOption() {
-        return childElementStream(PluginsElement.class).findFirst();
+    public ImmutableList<PluginElement> pluginElements() {
+        return childElementStream(PluginElement.class).collect(ImmutableList.toImmutableList());
     }
 }

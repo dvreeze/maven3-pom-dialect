@@ -139,5 +139,8 @@ public interface AnyPomElement {
                     .put(new QName(NS, "dependency"), DependencyElement::new)
                     .put(new QName(NS, "reporting"), ReportingElement::new)
                     .put(new QName(NS, "build"), BuildElement::new)
+                    .put(new QName(NS, "pluginManagement"), PluginManagementElement::new)
+                    .put(new QName(NS, "plugins"), PluginsElement::new)
+                    .put(new QName(NS, "plugin"), PluginElement::new)
                     .build();
 }
