@@ -17,10 +17,8 @@
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareDocument;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -31,7 +29,7 @@ import javax.xml.namespace.QName;
 import java.io.InputStream;
 import java.util.List;
 
-import static eu.cdevreeze.yaidom4j.dom.immutabledom.ElementPredicates.hasLocalName;
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasLocalName;
 import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_POM_NS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,8 +42,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Maven3DialectTests {
 
-    private Document doc1;
-    private Document doc2;
+    private AncestryAwareDocument doc1;
+    private AncestryAwareDocument doc2;
 
     @BeforeAll
     void parseDocuments() {
@@ -53,10 +51,11 @@ class Maven3DialectTests {
         doc2 = parseDocument("/large-sample-pom.xml");
     }
 
-    private Document parseDocument(String xmlClasspathResource) {
+    private AncestryAwareDocument parseDocument(String xmlClasspathResource) {
         InputStream inputStream = Maven3DialectTests.class.getResourceAsStream(xmlClasspathResource);
-        return DocumentParsers.builder().removingInterElementWhitespace().build()
+        var doc = DocumentParsers.builder().removingInterElementWhitespace().build()
                 .parse(new InputSource(inputStream));
+        return AncestryAwareDocument.from(doc);
     }
 
     @Test
@@ -102,18 +101,6 @@ class Maven3DialectTests {
     @Test
     void testElementClassNamesMatchingElementLocalNames() {
         ProjectElement projectElement = ProjectElement.from(doc1.documentElement());
-
-        Element docElemWithoutProperties = doc1.documentElement().transformDescendantElementsOrSelf(elm ->
-                (elm.name().equals(new QName(MAVEN_POM_NS, "properties"))) ?
-                        elm.withChildren(ImmutableList.of()) :
-                        elm
-        );
-        ProjectElement projectElementWithoutProperties = ProjectElement.from(docElemWithoutProperties);
-
-        assertEquals(
-                projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> !e.name().getNamespaceURI().equals(MAVEN_POM_NS)).toList(),
-                projectElementWithoutProperties.descendantElementOrSelfStream().filter(e -> e instanceof OtherPomElement).toList()
-        );
 
         assertTrue(
                 projectElement

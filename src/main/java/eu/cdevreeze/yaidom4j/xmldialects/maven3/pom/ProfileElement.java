@@ -18,7 +18,9 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
+
+import java.util.Optional;
 
 /**
  * Profile element in a Maven POM file.
@@ -27,7 +29,58 @@ import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
  */
 public record ProfileElement(Element backingElement) implements AnyPomElement {
 
+    public record BuildElement(Element backingElement) implements AnyPomElement {
+
+        public BuildElement {
+            Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "build")));
+        }
+    }
+
     public ProfileElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "profile")));
+    }
+
+    public Optional<IdElement> idElementOption() {
+        return childElementStream(IdElement.class).findFirst();
+    }
+
+    public Optional<ActivationElement> activationElementOption() {
+        return childElementStream(ActivationElement.class).findFirst();
+    }
+
+    public Optional<ProfileElement.BuildElement> buildElementOption() {
+        return childElementStream(ProfileElement.BuildElement.class).findFirst();
+    }
+
+    public Optional<ModulesElement> modulesElementOption() {
+        return childElementStream(ModulesElement.class).findFirst();
+    }
+
+    public Optional<DistributionManagementElement> distributionManagementElementOption() {
+        return childElementStream(DistributionManagementElement.class).findFirst();
+    }
+
+    public Optional<PropertiesElement> propertiesElementOption() {
+        return childElementStream(PropertiesElement.class).findFirst();
+    }
+
+    public Optional<DependencyManagementElement> dependencyManagementElementOption() {
+        return childElementStream(DependencyManagementElement.class).findFirst();
+    }
+
+    public Optional<DependenciesElement> dependenciesElementOption() {
+        return childElementStream(DependenciesElement.class).findFirst();
+    }
+
+    public Optional<RepositoriesElement> repositoriesElementOption() {
+        return childElementStream(RepositoriesElement.class).findFirst();
+    }
+
+    public Optional<PluginRepositoriesElement> pluginRepositoriesElementOption() {
+        return childElementStream(PluginRepositoriesElement.class).findFirst();
+    }
+
+    public Optional<ReportingElement> reportingElementOption() {
+        return childElementStream(ReportingElement.class).findFirst();
     }
 }

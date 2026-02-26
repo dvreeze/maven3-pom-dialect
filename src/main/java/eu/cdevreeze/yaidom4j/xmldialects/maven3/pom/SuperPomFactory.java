@@ -18,7 +18,6 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Document;
 
 /**
  * Factory creating the super POM. Note that the super POM has no "target Maven coordinates".
@@ -37,10 +36,11 @@ public class SuperPomFactory {
 
     // TODO Parsing document only once
 
-    private static Document parseSuperPomDocument() {
+    private static AncestryAwareDocument parseSuperPomDocument() {
         String xmlClasspathResource = "/super-pom.xml";
         InputStream inputStream = SuperPomFactory.class.getResourceAsStream(xmlClasspathResource);
-        return DocumentParsers.builder().removingInterElementWhitespace().build()
+        var doc = DocumentParsers.builder().removingInterElementWhitespace().build()
                 .parse(new InputSource(inputStream));
+        return AncestryAwareDocument.from(doc);
     }
 }

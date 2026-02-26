@@ -21,13 +21,13 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Goal element in a Maven POM file.
+ * Classifier element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record GoalElement(Element backingElement) implements AnyPomElement {
+public record ClassifierElement(Element backingElement) implements AnyPomElement {
 
-    public GoalElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "goal")));
+    public ClassifierElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "classifier")));
     }
 }

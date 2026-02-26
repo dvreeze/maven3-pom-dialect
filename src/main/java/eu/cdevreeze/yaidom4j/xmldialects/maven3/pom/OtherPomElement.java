@@ -17,7 +17,7 @@
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
  * "Other" element in a Maven POM file.

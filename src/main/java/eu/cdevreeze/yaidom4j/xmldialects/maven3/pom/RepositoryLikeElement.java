@@ -16,18 +16,21 @@
 
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
-import module eu.cdevreeze.yaidom4j;
-import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import java.util.Optional;
 
 /**
- * Source element in a Maven POM file.
+ * Any "repository"-like element in a Maven POM file. Corresponds to the XSD complex type of
+ * repository and pluginRepository elements.
  *
  * @author Chris de Vreeze
  */
-public record SourceElement(Element backingElement) implements AnyPomElement {
+public interface RepositoryLikeElement extends AnyPomElement {
 
-    public SourceElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "source")));
+    default Optional<NameElement> nameElementOption() {
+        return childElementStream(NameElement.class).findFirst();
+    }
+
+    default Optional<UrlElement> urlElementOption() {
+        return childElementStream(UrlElement.class).findFirst();
     }
 }

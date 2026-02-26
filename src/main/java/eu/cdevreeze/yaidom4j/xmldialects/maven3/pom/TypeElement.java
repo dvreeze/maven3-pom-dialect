@@ -18,10 +18,11 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Type element in a Maven POM file.
+ * Type element in a Maven POM file. It can occur in many locations in a POM file, but always having
+ * the same XSD type "xs:string".
  *
  * @author Chris de Vreeze
  */

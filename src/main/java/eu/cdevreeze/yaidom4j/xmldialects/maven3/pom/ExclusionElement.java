@@ -23,18 +23,29 @@ import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 import java.util.Optional;
 
 /**
- * Dependency management element in a Maven POM file. It can occur in many locations in a POM file, but always having
- * the same XML structure.
+ * Exclusion element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record DependencyManagementElement(Element backingElement) implements AnyPomElement {
+public record ExclusionElement(Element backingElement) implements AnyPomElement {
 
-    public DependencyManagementElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "dependencyManagement")));
+    public ExclusionElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "exclusion")));
     }
 
-    public Optional<DependenciesElement> dependenciesElementOption() {
-        return childElementStream(DependenciesElement.class).findFirst();
+    public Optional<GroupIdElement> groupIdElementOption() {
+        return childElementStream(GroupIdElement.class).findFirst();
+    }
+
+    public Optional<String> groupIdOption(PomProperties properties) {
+        return groupIdElementOption().map(e -> e.groupId(properties));
+    }
+
+    public Optional<ArtifactIdElement> artifactIdElementOption() {
+        return childElementStream(ArtifactIdElement.class).findFirst();
+    }
+
+    public Optional<String> artifactIdOption(PomProperties properties) {
+        return artifactIdElementOption().map(e -> e.artifactId(properties));
     }
 }

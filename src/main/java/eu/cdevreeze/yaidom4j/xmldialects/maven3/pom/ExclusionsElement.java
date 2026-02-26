@@ -18,16 +18,20 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Target element in a Maven POM file.
+ * Exclusions element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record TargetElement(Element backingElement) implements AnyPomElement {
+public record ExclusionsElement(Element backingElement) implements AnyPomElement {
 
-    public TargetElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "target")));
+    public ExclusionsElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "exclusions")));
+    }
+
+    public ImmutableList<ExclusionElement> exclusionElements() {
+        return childElementStream(ExclusionElement.class).collect(ImmutableList.toImmutableList());
     }
 }

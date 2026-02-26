@@ -43,7 +43,7 @@ import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_P
  */
 public class PomInterDependencyReporter {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Objects.checkIndex(0, args.length);
         ImmutableList<Path> rootDirectories = Arrays.stream(args)
                 .map(Path::of)
@@ -77,7 +77,7 @@ public class PomInterDependencyReporter {
 
     private Element generateReportForPom(PomFile pomFile) {
         // Stripping everything from the POM, except Maven coordinates, parent and modules
-        Element strippedProjectElement = pomFile.projectElement().backingElement()
+        var strippedProjectElement = pomFile.projectElement().backingElement().underlyingElement()
                 .transformChildElementsToNodeLists(che ->
                         switch (che.name().getLocalPart()) {
                             case "modelVersion", "groupId", "artifactId", "version", "packaging", "modules", "parent" ->
@@ -130,9 +130,10 @@ public class PomInterDependencyReporter {
     private PomFile parsePom(Path path, DocumentParser documentParser) {
         Preconditions.checkArgument(Files.isRegularFile(path));
 
-        Element rootElement = documentParser.parse(path.toUri()).documentElement();
-        Preconditions.checkState(rootElement.name().equals(new QName(MAVEN_POM_NS, "project")));
-        return new PomFile(ProjectElement.from(rootElement), path);
+        var doc = documentParser.parse(path.toUri());
+        Preconditions.checkState(doc.documentElement().name().equals(new QName(MAVEN_POM_NS, "project")));
+        var ancestryAwareRootElement = AncestryAwareDocument.from(doc).documentElement();
+        return new PomFile(ProjectElement.from(ancestryAwareRootElement), path);
     }
 
     /**

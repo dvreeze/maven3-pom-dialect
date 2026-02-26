@@ -18,16 +18,20 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Reports element in a Maven POM file.
+ * Extensions element in a Maven POM file, provided the parent element is called "build".
  *
  * @author Chris de Vreeze
  */
-public record ReportsElement(Element backingElement) implements AnyPomElement {
+public record ExtensionsElement(Element backingElement) implements AnyPomElement {
 
-    public ReportsElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "reports")));
+    public ExtensionsElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "extensions")));
+    }
+
+    public ImmutableList<ExtensionElement> extensionElements() {
+        return childElementStream(ExtensionElement.class).collect(ImmutableList.toImmutableList());
     }
 }

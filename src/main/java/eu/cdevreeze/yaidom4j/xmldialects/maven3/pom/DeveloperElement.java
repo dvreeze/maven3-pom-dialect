@@ -18,7 +18,7 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
  * Developer element in a Maven POM file.
@@ -30,4 +30,6 @@ public record DeveloperElement(Element backingElement) implements AnyPomElement 
     public DeveloperElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "developer")));
     }
+
+    // Child element "organization" is of type "xs:string", not of XSD type "Organization".
 }

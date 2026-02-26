@@ -18,7 +18,9 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
+
+import java.util.Optional;
 
 /**
  * Parent element in a Maven POM file.
@@ -29,5 +31,9 @@ public record ParentElement(Element backingElement) implements DependencyLikeEle
 
     public ParentElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "parent")));
+    }
+
+    public Optional<RelativePathElement> relativePathElementOption() {
+        return childElementStream(RelativePathElement.class).findFirst();
     }
 }

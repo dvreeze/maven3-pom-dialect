@@ -18,14 +18,13 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 import java.util.Optional;
 
-import static eu.cdevreeze.yaidom4j.dom.immutabledom.ElementPredicates.hasName;
-
 /**
- * Dependency element in a Maven POM file.
+ * Dependency element in a Maven POM file. It can occur in many locations in a POM file, but always having
+ * the same XML structure.
  * <p>
  * No dependencyManagement context is taken into account in the methods offered by this class.
  *
@@ -37,10 +36,27 @@ public record DependencyElement(Element backingElement) implements DependencyLik
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "dependency")));
     }
 
-    public Optional<OtherPomElement> classifierElementOption() {
-        return backingElement()
-                .childElementStream(hasName(MAVEN_POM_NS, "classifier"))
-                .findFirst()
-                .map(OtherPomElement::new);
+    public Optional<TypeElement> typeElementOption() {
+        return childElementStream(TypeElement.class).findFirst();
+    }
+
+    public Optional<ClassifierElement> classifierElementOption() {
+        return childElementStream(ClassifierElement.class).findFirst();
+    }
+
+    public Optional<ScopeElement> scopeElementOption() {
+        return childElementStream(ScopeElement.class).findFirst();
+    }
+
+    public Optional<SystemPathElement> systemPathElementOption() {
+        return childElementStream(SystemPathElement.class).findFirst();
+    }
+
+    public Optional<ExclusionsElement> exclusionsElementOption() {
+        return childElementStream(ExclusionsElement.class).findFirst();
+    }
+
+    public Optional<OptionalElement> optionalElementOption() {
+        return childElementStream(OptionalElement.class).findFirst();
     }
 }

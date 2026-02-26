@@ -15,7 +15,7 @@
  */
 
 /**
- * XML dialect support for Maven 3 POM files, as wrappers around {@link eu.cdevreeze.yaidom4j.dom.immutabledom.Element}.
+ * XML dialect support for Maven 3 POM files, as wrappers around {@link eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element}.
  * See <a href="https://maven.apache.org/pom.html">POM Reference</a>. These wrappers are foremost syntactic
  * in nature.
  * <p>

@@ -18,7 +18,7 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 import java.util.Optional;
 
@@ -88,8 +88,12 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return urlElementOption().map(e -> e.resolvedValue(properties));
     }
 
-    public Optional<PropertiesElement> propertiesElementOption() {
-        return childElementStream(PropertiesElement.class).findFirst();
+    public Optional<InceptionYearElement> inceptionYearElementOption() {
+        return childElementStream(InceptionYearElement.class).findFirst();
+    }
+
+    public Optional<OrganizationElement> organizationElementOption() {
+        return childElementStream(OrganizationElement.class).findFirst();
     }
 
     public Optional<LicensesElement> licensesElementOption() {
@@ -104,6 +108,10 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return childElementStream(ContributorsElement.class).findFirst();
     }
 
+    public Optional<MailingListsElement> mailingListsElementOption() {
+        return childElementStream(MailingListsElement.class).findFirst();
+    }
+
     public Optional<PrerequisitesElement> prerequisitesElementOption() {
         return childElementStream(PrerequisitesElement.class).findFirst();
     }
@@ -116,6 +124,26 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
         return modulesElementOption()
                 .map(e -> e.modules(properties))
                 .orElse(ImmutableList.of());
+    }
+
+    public Optional<ScmElement> scmElementOption() {
+        return childElementStream(ScmElement.class).findFirst();
+    }
+
+    public Optional<IssueManagementElement> issueManagementElementOption() {
+        return childElementStream(IssueManagementElement.class).findFirst();
+    }
+
+    public Optional<CiManagementElement> ciManagementElementOption() {
+        return childElementStream(CiManagementElement.class).findFirst();
+    }
+
+    public Optional<DistributionManagementElement> distributionManagementElementOption() {
+        return childElementStream(DistributionManagementElement.class).findFirst();
+    }
+
+    public Optional<PropertiesElement> propertiesElementOption() {
+        return childElementStream(PropertiesElement.class).findFirst();
     }
 
     public Optional<DependencyManagementElement> dependencyManagementElementOption() {
@@ -136,6 +164,10 @@ public record ProjectElement(Element backingElement) implements DependencyLikeEl
 
     public Optional<BuildElement> buildElementOption() {
         return childElementStream(BuildElement.class).findFirst();
+    }
+
+    public Optional<ReportingElement> reportingElementOption() {
+        return childElementStream(ReportingElement.class).findFirst();
     }
 
     public Optional<ProfilesElement> profilesElementOption() {

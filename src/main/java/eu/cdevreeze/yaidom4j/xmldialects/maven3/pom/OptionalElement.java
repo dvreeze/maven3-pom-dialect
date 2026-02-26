@@ -21,13 +21,13 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Goal element in a Maven POM file.
+ * Optional element in a Maven POM file.
  *
  * @author Chris de Vreeze
  */
-public record GoalElement(Element backingElement) implements AnyPomElement {
+public record OptionalElement(Element backingElement) implements AnyPomElement {
 
-    public GoalElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "goal")));
+    public OptionalElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "optional")));
     }
 }

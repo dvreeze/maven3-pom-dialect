@@ -18,12 +18,12 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import module eu.cdevreeze.yaidom4j;
 import module java.base;
-import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 import java.util.Optional;
 
 /**
- * Organization element in a Maven POM file.
+ * Organization element in a Maven POM file, as child element of the root element.
  *
  * @author Chris de Vreeze
  */
@@ -37,7 +37,15 @@ public record OrganizationElement(Element backingElement) implements AnyPomEleme
         return childElementStream(NameElement.class).findFirst();
     }
 
+    public Optional<String> nameOption(PomProperties properties) {
+        return nameElementOption().map(e -> e.resolvedValue(properties));
+    }
+
     public Optional<UrlElement> urlElementOption() {
         return childElementStream(UrlElement.class).findFirst();
+    }
+
+    public Optional<String> urlOption(PomProperties properties) {
+        return urlElementOption().map(e -> e.resolvedValue(properties));
     }
 }
