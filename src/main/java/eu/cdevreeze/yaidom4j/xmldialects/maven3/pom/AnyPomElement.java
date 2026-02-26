@@ -189,6 +189,7 @@ public interface AnyPomElement {
                     .put(new QName(MAVEN_POM_NS, "optional"), OptionalElement::new)
                     .put(new QName(MAVEN_POM_NS, "relativePath"), RelativePathElement::new)
                     .put(new QName(MAVEN_POM_NS, "systemPath"), SystemPathElement::new)
+                    .put(new QName(MAVEN_POM_NS, "defaultGoal"), DefaultGoalElement::new)
                     .build();
 
     private static AnyPomElement organizationElement(Element backingElement) {

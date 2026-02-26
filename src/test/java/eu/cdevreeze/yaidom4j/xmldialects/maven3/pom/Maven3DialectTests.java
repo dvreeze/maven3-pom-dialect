@@ -18,7 +18,10 @@ package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import eu.cdevreeze.yaidom4j.core.ElementNavigationPath;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareDocument;
+import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,6 +31,7 @@ import org.xml.sax.InputSource;
 import javax.xml.namespace.QName;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasLocalName;
 import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_POM_NS;
@@ -154,6 +158,34 @@ class Maven3DialectTests {
     }
 
     @Test
+    void testTypesafeModelInLargePom() {
+        ProjectElement projectElement = ProjectElement.from(doc2.documentElement());
+        Preconditions.checkState(projectElement.descendantElementOrSelfStream().count() >= 800);
+
+        List<AncestryAwareNodes.Element> otherPomElements = projectElement
+                .descendantElementOrSelfStream(OtherPomElement.class)
+                .map(AnyPomElement::backingElement)
+                .toList();
+
+        List<List<QName>> paths =
+                otherPomElements.stream()
+                        .map(AncestryAwareNodes.Element::elementNavigationPath)
+                        .map(p -> getPath(projectElement, p))
+                        .distinct()
+                        .toList();
+
+        List<List<QName>> nonExpectedPaths = paths.stream()
+                .filter(p -> !p.contains(new QName(MAVEN_POM_NS, "properties"))
+                        && !p.contains(new QName(MAVEN_POM_NS, "configuration"))
+                        && !p.contains(new QName(MAVEN_POM_NS, "activation"))
+                        && !p.contains(new QName(MAVEN_POM_NS, "snapshots"))
+                )
+                .toList();
+
+        assertEquals(0, nonExpectedPaths.size());
+    }
+
+    @Test
     void testQueryDependencies() {
         PomProperties extraProperties = new PomProperties(ImmutableMap.of("revision", "0.0.1-SNAPSHOT"));
 
@@ -197,5 +229,19 @@ class Maven3DialectTests {
             return string;
         }
         return Character.toUpperCase(string.charAt(0)) + string.substring(1);
+    }
+
+    private static List<QName> getPath(ProjectElement projectElement, ElementNavigationPath navPath) {
+        return getPath(projectElement.backingElement().underlyingElement(), navPath);
+    }
+
+    private static List<QName> getPath(Element rootElement, ElementNavigationPath navPath) {
+        if (navPath.isEmpty()) {
+            return List.of(rootElement.name());
+        } else {
+            Element nextElement = rootElement.childElementStream().toList().get(navPath.getEntry(0));
+            // Recursion
+            return Stream.concat(Stream.of(rootElement.name()), getPath(nextElement, navPath.withoutFirstEntry()).stream()).toList();
+        }
     }
 }

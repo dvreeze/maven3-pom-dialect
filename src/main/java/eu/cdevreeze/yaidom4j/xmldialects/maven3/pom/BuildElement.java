@@ -23,7 +23,7 @@ import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 import java.util.Optional;
 
 /**
- * Build element in a Maven POM file.
+ * Build element in a Maven POM file, as child element of the root element.
  *
  * @author Chris de Vreeze
  */

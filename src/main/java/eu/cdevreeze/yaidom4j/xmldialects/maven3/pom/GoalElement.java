@@ -21,7 +21,7 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Goal element in a Maven POM file.
+ * Goal element in a Maven POM file, as grandchild element of an "execution" element.
  *
  * @author Chris de Vreeze
  */

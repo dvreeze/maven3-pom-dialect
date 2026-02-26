@@ -21,13 +21,14 @@ import module java.base;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 /**
- * Extension element in a Maven POM file, provided the grandparent element is called "build".
+ * Default goal element in a Maven POM file. It can occur in multiple locations in a POM file, but always having
+ * the same type "xs:string".
  *
  * @author Chris de Vreeze
  */
-public record ExtensionElement(Element backingElement) implements AnyPomElement {
+public record DefaultGoalElement(Element backingElement) implements AnyPomElement {
 
-    public ExtensionElement {
-        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "extension")));
+    public DefaultGoalElement {
+        Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "defaultGoal")));
     }
 }
