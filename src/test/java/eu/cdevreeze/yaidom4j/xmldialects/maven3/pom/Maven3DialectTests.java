@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasLocalName;
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasName;
 import static eu.cdevreeze.yaidom4j.xmldialects.maven3.pom.AnyPomElement.MAVEN_POM_NS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -183,6 +184,45 @@ class Maven3DialectTests {
                 .toList();
 
         assertEquals(0, nonExpectedPaths.size());
+    }
+
+    @Test
+    void testDifferentBuildElementsInLargePom() {
+        ProjectElement projectElement = ProjectElement.from(doc2.documentElement());
+        Preconditions.checkState(projectElement.descendantElementOrSelfStream().count() >= 800);
+
+        assertTrue(
+                projectElement.backingElement()
+                        .childElementStream(hasName(MAVEN_POM_NS, "build"))
+                        .findFirst()
+                        .isPresent()
+        );
+
+        assertEquals(
+                projectElement.childElementStream()
+                        .filter(e -> e.name().equals(new QName(MAVEN_POM_NS, "build")))
+                        .toList(),
+                projectElement.childElementStream(BuildElement.class).toList()
+        );
+
+        assertTrue(
+                projectElement.backingElement()
+                        .descendantElementStream(hasName(MAVEN_POM_NS, "profile"))
+                        .flatMap(e -> e.descendantElementStream(hasName(MAVEN_POM_NS, "build")))
+                        .findFirst()
+                        .isPresent()
+        );
+
+        assertEquals(
+                projectElement
+                        .descendantElementStream()
+                        .filter(e -> e.name().equals(new QName(MAVEN_POM_NS, "profile")))
+                        .flatMap(e -> e.descendantElementStream()
+                                .filter(e2 -> e2.name().equals(new QName(MAVEN_POM_NS, "build")))
+                        )
+                        .toList(),
+                projectElement.descendantElementStream(ProfileElement.BuildElement.class).toList()
+        );
     }
 
     @Test

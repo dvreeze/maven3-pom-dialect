@@ -134,7 +134,7 @@ public interface AnyPomElement {
                     .put(new QName(MAVEN_POM_NS, "description"), DescriptionElement::new)
                     .put(new QName(MAVEN_POM_NS, "url"), UrlElement::new)
                     .put(new QName(MAVEN_POM_NS, "inceptionYear"), InceptionYearElement::new)
-                    .put(new QName(MAVEN_POM_NS, "organization"), AnyPomElement::organizationElement)
+                    .put(new QName(MAVEN_POM_NS, "organization"), AnyPomElement::createOrganizationElement)
                     .put(new QName(MAVEN_POM_NS, "licenses"), LicensesElement::new)
                     .put(new QName(MAVEN_POM_NS, "license"), LicenseElement::new)
                     .put(new QName(MAVEN_POM_NS, "developers"), DevelopersElement::new)
@@ -158,8 +158,8 @@ public interface AnyPomElement {
                     .put(new QName(MAVEN_POM_NS, "repository"), RepositoryElement::new)
                     .put(new QName(MAVEN_POM_NS, "pluginRepositories"), PluginRepositoriesElement::new)
                     .put(new QName(MAVEN_POM_NS, "pluginRepository"), PluginRepositoryElement::new)
-                    .put(new QName(MAVEN_POM_NS, "build"), AnyPomElement::buildElement)
-                    .put(new QName(MAVEN_POM_NS, "reports"), AnyPomElement::reportsElement)
+                    .put(new QName(MAVEN_POM_NS, "build"), AnyPomElement::createBuildElement)
+                    .put(new QName(MAVEN_POM_NS, "reports"), AnyPomElement::createReportsElement)
                     .put(new QName(MAVEN_POM_NS, "reporting"), ReportingElement::new)
                     .put(new QName(MAVEN_POM_NS, "pluginManagement"), PluginManagementElement::new)
                     .put(new QName(MAVEN_POM_NS, "plugins"), PluginsElement::new)
@@ -178,21 +178,21 @@ public interface AnyPomElement {
                     .put(new QName(MAVEN_POM_NS, "system"), SystemElement::new)
                     .put(new QName(MAVEN_POM_NS, "id"), IdElement::new)
                     .put(new QName(MAVEN_POM_NS, "phase"), PhaseElement::new)
-                    .put(new QName(MAVEN_POM_NS, "goals"), AnyPomElement::goalsElement)
-                    .put(new QName(MAVEN_POM_NS, "goal"), AnyPomElement::goalElement)
+                    .put(new QName(MAVEN_POM_NS, "goals"), AnyPomElement::createGoalsElement)
+                    .put(new QName(MAVEN_POM_NS, "goal"), AnyPomElement::createGoalElement)
                     .put(new QName(MAVEN_POM_NS, "activation"), ActivationElement::new)
                     .put(new QName(MAVEN_POM_NS, "classifier"), ClassifierElement::new)
                     .put(new QName(MAVEN_POM_NS, "exclusions"), ExclusionsElement::new)
                     .put(new QName(MAVEN_POM_NS, "exclusion"), ExclusionElement::new)
-                    .put(new QName(MAVEN_POM_NS, "extensions"), AnyPomElement::extensionsElement)
-                    .put(new QName(MAVEN_POM_NS, "extension"), AnyPomElement::extensionElement)
+                    .put(new QName(MAVEN_POM_NS, "extensions"), AnyPomElement::createExtensionsElement)
+                    .put(new QName(MAVEN_POM_NS, "extension"), AnyPomElement::createExtensionElement)
                     .put(new QName(MAVEN_POM_NS, "optional"), OptionalElement::new)
                     .put(new QName(MAVEN_POM_NS, "relativePath"), RelativePathElement::new)
                     .put(new QName(MAVEN_POM_NS, "systemPath"), SystemPathElement::new)
                     .put(new QName(MAVEN_POM_NS, "defaultGoal"), DefaultGoalElement::new)
                     .build();
 
-    private static AnyPomElement organizationElement(Element backingElement) {
+    private static AnyPomElement createOrganizationElement(Element backingElement) {
         if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "project")).isPresent()) {
             return new OrganizationElement(backingElement);
         } else {
@@ -200,7 +200,7 @@ public interface AnyPomElement {
         }
     }
 
-    private static AnyPomElement buildElement(Element backingElement) {
+    private static AnyPomElement createBuildElement(Element backingElement) {
         if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "project")).isPresent()) {
             return new BuildElement(backingElement);
         } else if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "profile")).isPresent()) {
@@ -210,12 +210,12 @@ public interface AnyPomElement {
         }
     }
 
-    private static AnyPomElement reportsElement(Element backingElement) {
+    private static AnyPomElement createReportsElement(Element backingElement) {
         // Can occur in multiple locations in a POM file
         return new OtherPomElement(backingElement);
     }
 
-    private static AnyPomElement goalsElement(Element backingElement) {
+    private static AnyPomElement createGoalsElement(Element backingElement) {
         if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "execution")).isPresent()) {
             // For XSD type "PluginExecution" as parent element type
             return new GoalsElement(backingElement);
@@ -227,7 +227,7 @@ public interface AnyPomElement {
         }
     }
 
-    private static AnyPomElement goalElement(Element backingElement) {
+    private static AnyPomElement createGoalElement(Element backingElement) {
         if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "goals")).isPresent()) {
             var grandParentElementOption = backingElement.parentElementOption().flatMap(Element::parentElementOption);
             if (grandParentElementOption.filter(hasName(MAVEN_POM_NS, "execution")).isPresent()) {
@@ -241,7 +241,7 @@ public interface AnyPomElement {
         }
     }
 
-    private static AnyPomElement extensionsElement(Element backingElement) {
+    private static AnyPomElement createExtensionsElement(Element backingElement) {
         if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "build")).isPresent()) {
             // For XSD type "Build" as parent element type
             return new ExtensionsElement(backingElement);
@@ -253,7 +253,7 @@ public interface AnyPomElement {
         }
     }
 
-    private static AnyPomElement extensionElement(Element backingElement) {
+    private static AnyPomElement createExtensionElement(Element backingElement) {
         if (backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "extensions")).isPresent()) {
             var grandParentElementOption = backingElement.parentElementOption().flatMap(Element::parentElementOption);
             if (grandParentElementOption.filter(hasName(MAVEN_POM_NS, "build")).isPresent()) {
