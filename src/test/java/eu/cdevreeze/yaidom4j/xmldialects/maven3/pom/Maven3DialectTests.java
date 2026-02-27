@@ -17,12 +17,15 @@
 package eu.cdevreeze.yaidom4j.xmldialects.maven3.pom;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.cdevreeze.yaidom4j.core.ElementNavigationPath;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareDocument;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.Element;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.Nodes;
 import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentParsers;
+import eu.cdevreeze.yaidom4j.dom.immutabledom.jaxpinterop.DocumentPrinters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -31,6 +34,7 @@ import org.xml.sax.InputSource;
 import javax.xml.namespace.QName;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasLocalName;
@@ -130,6 +134,10 @@ class Maven3DialectTests {
     void testElementClassNamesMatchingElementLocalNamesInLargePom() {
         ProjectElement projectElement = ProjectElement.from(doc2.documentElement());
         Preconditions.checkState(projectElement.descendantElementOrSelfStream().count() >= 800);
+
+        Element projectElementStruct = keepClassNames(projectElement);
+        String projectElementStructAsXmlString = DocumentPrinters.instance().print(projectElementStruct);
+        System.out.println(projectElementStructAsXmlString);
 
         assertEquals(
                 projectElement.backingElement().descendantElementOrSelfStream().count(),
@@ -282,6 +290,28 @@ class Maven3DialectTests {
             Element nextElement = rootElement.childElementStream().toList().get(navPath.getEntry(0));
             // Recursion
             return Stream.concat(Stream.of(rootElement.name()), getPath(nextElement, navPath.withoutFirstEntry()).stream()).toList();
+        }
+    }
+
+    private static Element keepClassNames(AnyPomElement anyPomElement) {
+        // Recursive
+        return Nodes.elem(new QName(typeNameWithoutPackage(anyPomElement)))
+                .withAttributes(ImmutableMap.of(new QName("localName"), anyPomElement.name().getLocalPart()))
+                .withChildren(
+                        anyPomElement.childElementStream()
+                                .map(Maven3DialectTests::keepClassNames)
+                                .collect(ImmutableList.toImmutableList())
+                );
+    }
+
+    private static String typeNameWithoutPackage(AnyPomElement anyPomElement) {
+        Class<?> clazz = anyPomElement.getClass();
+        Package pkg = Objects.requireNonNull(clazz.getPackage());
+
+        if (clazz.getTypeName().startsWith(pkg.getName() + ".")) {
+            return clazz.getTypeName().substring(pkg.getName().length() + 1);
+        } else {
+            return clazz.getTypeName();
         }
     }
 }
