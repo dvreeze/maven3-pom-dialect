@@ -22,6 +22,8 @@ import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 import java.util.Optional;
 
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasName;
+
 /**
  * Plugin element in a Maven POM file. It can occur in many locations in a POM file, but always having
  * the same XML structure.
@@ -36,6 +38,7 @@ public record PluginElement(Element backingElement) implements DependencyLikeEle
 
         public ExtensionsElement {
             Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "extensions")));
+            Preconditions.checkArgument(backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "plugin")).isPresent());
         }
     }
 
@@ -61,6 +64,7 @@ public record PluginElement(Element backingElement) implements DependencyLikeEle
 
         public GoalsElement {
             Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "goals")));
+            Preconditions.checkArgument(backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "plugin")).isPresent());
         }
     }
 

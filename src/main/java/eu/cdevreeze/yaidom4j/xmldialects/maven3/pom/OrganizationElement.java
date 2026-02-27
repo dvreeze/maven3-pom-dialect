@@ -22,6 +22,8 @@ import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 import java.util.Optional;
 
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasName;
+
 /**
  * Organization element in a Maven POM file, as child element of the root element.
  *
@@ -31,6 +33,7 @@ public record OrganizationElement(Element backingElement) implements AnyPomEleme
 
     public OrganizationElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "organization")));
+        Preconditions.checkArgument(backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "project")).isPresent());
     }
 
     public Optional<NameElement> nameElementOption() {

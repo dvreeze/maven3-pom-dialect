@@ -22,6 +22,8 @@ import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
 import java.util.Optional;
 
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasName;
+
 /**
  * Profile element in a Maven POM file.
  *
@@ -33,6 +35,7 @@ public record ProfileElement(Element backingElement) implements AnyPomElement {
 
         public BuildElement {
             Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "build")));
+            Preconditions.checkArgument(backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "profile")).isPresent());
         }
     }
 

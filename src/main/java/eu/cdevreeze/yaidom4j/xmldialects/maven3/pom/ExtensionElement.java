@@ -20,6 +20,8 @@ import module eu.cdevreeze.yaidom4j;
 import module java.base;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasName;
+
 /**
  * Extension element in a Maven POM file, provided the grandparent element is called "build".
  *
@@ -29,5 +31,9 @@ public record ExtensionElement(Element backingElement) implements AnyPomElement 
 
     public ExtensionElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "extension")));
+        Preconditions.checkArgument(backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "extensions")).isPresent());
+        Preconditions.checkArgument(backingElement.parentElementOption()
+                .flatMap(Element::parentElementOption)
+                .filter(hasName(MAVEN_POM_NS, "build")).isPresent());
     }
 }

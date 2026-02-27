@@ -20,6 +20,8 @@ import module eu.cdevreeze.yaidom4j;
 import module java.base;
 import eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareNodes.Element;
 
+import static eu.cdevreeze.yaidom4j.dom.ancestryaware.AncestryAwareElementPredicates.hasName;
+
 /**
  * Goal element in a Maven POM file, as grandchild element of an "execution" element.
  *
@@ -29,5 +31,9 @@ public record GoalElement(Element backingElement) implements AnyPomElement {
 
     public GoalElement {
         Preconditions.checkArgument(backingElement.name().equals(new QName(MAVEN_POM_NS, "goal")));
+        Preconditions.checkArgument(backingElement.parentElementOption().filter(hasName(MAVEN_POM_NS, "goals")).isPresent());
+        Preconditions.checkArgument(backingElement.parentElementOption()
+                .flatMap(Element::parentElementOption)
+                .filter(hasName(MAVEN_POM_NS, "execution")).isPresent());
     }
 }
